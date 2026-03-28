@@ -34,5 +34,10 @@ if __name__ == "__main__":
     # ---------------------------------------------------------
     # สุ่มยิงข้อมูลเพื่อหาจุดที่ทำให้ API พัง (Uncaught Exceptions)
     run_command("python -m pytest tests/test_api.py::test_api_fuzzing", "Stage 3: API Fuzzing (Schemathesis)")
+
+# ---------------------------------------------------------
+    # ด่าน 4: Security Testing (Bandit)
+    # ---------------------------------------------------------
+    run_command("bandit app.py", "Stage 4: SAST Security Scan (Bandit)")
     
     print("\n🎉 Pipeline Completed Successfully! โค้ดชุดนี้ปลอดภัย พร้อม Commit แล้ว! 🎉\n")
