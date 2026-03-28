@@ -1,7 +1,7 @@
 import pytest
 from testcontainers.postgres import PostgresContainer
-
-# Import ตัวแอปและ Database จากไฟล์ app.py ของเรา
+import schemathesis
+from hypothesis import settings, HealthCheck
 from app import app, db, User
 
 # ---------------------------------------------------------
@@ -73,3 +73,32 @@ def test_get_users_with_data(client):
     data = response.get_json()
     assert len(data) == 2
     assert data[0]['username'] == 'user1'
+
+
+schema = schemathesis.from_wsgi("/openapi.json", app)
+
+@schema.parametrize()
+@settings(
+    max_examples=10,
+    suppress_health_check=[HealthCheck.filter_too_much, HealthCheck.too_slow]
+)
+def test_api_fuzzing(case, postgres_container):
+    """
+    Fuzzing Test ที่สมบูรณ์แบบสำหรับโปรเจกต์ ป.โท
+    """
+    from app import db # import db มาสั่งสร้างตาราง
+    
+    # 1. บังคับเปลี่ยน DB ไปใช้ตัวที่ Testcontainers สร้าง
+    app.config['SQLALCHEMY_DATABASE_URI'] = postgres_container
+    
+    with app.app_context():
+        # 2. สร้างตารางใหม่ใน Postgres ตัวนี้ (แก้ปัญหา sqlite3 Error)
+        db.create_all() 
+        
+        # 3. รันเทสต์
+        response = case.call_wsgi()
+        
+        # 4. ตรวจสอบ: เราจะยอมรับ Code 201(ผ่าน), 400(ข้อมูลเน่า), และ 415(Header ผิด) 
+        allowed_codes = [200, 201, 400, 415]
+        if response.status_code not in allowed_codes:
+             case.validate_response(response)

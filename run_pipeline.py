@@ -28,5 +28,11 @@ if __name__ == "__main__":
     # ด่าน 2: Integration Testing
     # ---------------------------------------------------------
     run_command("python -m pytest -v tests/", "Stage 2: Integration Tests (Testcontainers)")
+
+    # ---------------------------------------------------------
+    # ด่าน 3: API Fuzzing (Schemathesis)
+    # ---------------------------------------------------------
+    # สุ่มยิงข้อมูลเพื่อหาจุดที่ทำให้ API พัง (Uncaught Exceptions)
+    run_command("python -m pytest tests/test_api.py::test_api_fuzzing", "Stage 3: API Fuzzing (Schemathesis)")
     
     print("\n🎉 Pipeline Completed Successfully! โค้ดชุดนี้ปลอดภัย พร้อม Commit แล้ว! 🎉\n")

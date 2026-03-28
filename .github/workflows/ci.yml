@@ -23,7 +23,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.12' # ใช้ 3.12 เพื่อความเสถียรบน Server
+        python-version: '3.12'
 
     - name: Install dependencies
       run: |
@@ -36,3 +36,6 @@ jobs:
 
     - name: Stage 2 - Integration Tests (Testcontainers + Postgres)
       run: python -m pytest -v tests/
+
+    - name: Stage 3 - API Fuzzing (Schemathesis)
+      run: python -m pytest tests/test_api.py::test_api_fuzzing

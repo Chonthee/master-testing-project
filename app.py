@@ -22,6 +22,40 @@ with app.app_context():
     db.create_all()
 
 # --- API Endpoints ---
+@app.route("/openapi.json")
+def openapi_spec():
+    """
+    สร้างแผนผัง API แบบง่ายๆ เพื่อให้ Schemathesis อ่านไปใช้ทำ Fuzzing ได้
+    """
+    return jsonify({
+        "openapi": "3.0.0",
+        "info": {"title": "Master Project API", "version": "1.0.0"},
+        "paths": {
+            "/users": {
+                "get": {
+                    "responses": {"200": {"description": "List users"}}
+                },
+                "post": {
+                    "requestBody": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "name": {"type": "string"},
+                                        "email": {"type": "string"}
+                                    },
+                                    "required": ["name", "email"]
+                                }
+                            }
+                        }
+                    },
+                    "responses": {"201": {"description": "User created"}}
+                }
+            }
+        }
+    })
+
 
 @app.route('/users', methods=['POST'])
 def create_user():
