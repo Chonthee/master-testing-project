@@ -1,0 +1,38 @@
+name: Python Enterprise CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    services:
+      # เราจะให้ GitHub เตรียม Docker ไว้ให้พร้อมใช้งาน
+      docker:
+        image: docker:dind
+        options: --privileged
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12' # ใช้ 3.12 เพื่อความเสถียรบน Server
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install ruff pytest testcontainers sqlalchemy psycopg2-binary flask
+
+    - name: Stage 1 - Code Quality & Security (Ruff)
+      run: ruff check app.py
+
+    - name: Stage 2 - Integration Tests (Testcontainers + Postgres)
+      run: python -m pytest -v tests/

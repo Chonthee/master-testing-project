@@ -1,0 +1,11 @@
+# --- Web Framework & Database ---
+Flask==3.0.2
+Flask-SQLAlchemy==3.1.1
+psycopg2-binary
+
+# --- Testing Tools ---
+pytest==8.0.2
+testcontainers[postgres]==4.3.1
+bandit==1.7.7
+mutmut==2.4.4
+schemathesis==3.26.2
