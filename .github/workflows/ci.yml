@@ -36,8 +36,5 @@ jobs:
     - name: Stage 2 - Integration Tests (Testcontainers + Postgres)
       run: python -m pytest -v tests/
 
-    - name: Stage 3 - API Fuzzing (Schemathesis)
-      run: python -m pytest tests/test_api.py::test_api_fuzzing
-
-    - name: Stage 4 - SAST Security Scan (Bandit)
+    - name: Stage 3 - SAST Security Scan (Bandit)
       run: bandit app.py
