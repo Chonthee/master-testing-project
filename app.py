@@ -1,6 +1,7 @@
 import os
-from flask import Flask, request, jsonify
+from flask import Flask, abort, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
+import sys 
 
 app = Flask(__name__)
 
@@ -77,7 +78,7 @@ def get_users():
 @app.route('/api/test-fuzz', methods=['POST'])
 def test_fuzzing():
     data = request.get_json()
-    
+    abort(500)
     # 💥 วางยา: แกล้งเอาข้อมูลที่รับมาไปแปลงเป็นตัวเลข (int) ดื้อๆ โดยไม่ดัก Error
     # - ด่าน 1 (Ruff): มองว่าโค้ดสวยงาม ถูก Syntax ปล่อยผ่าน ✅
     # - ด่าน 2 (Integration): เราอาจจะเทสต์ด้วยการส่งตัวเลขมาปกติ มันก็เลยผ่าน ✅
