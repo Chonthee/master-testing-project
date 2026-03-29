@@ -1,5 +1,4 @@
 import os
-import sys
 from flask import Flask, abort, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 
