@@ -74,5 +74,12 @@ def get_users():
     result = [{'id': u.id, 'username': u.username, 'email': u.email} for u in users]
     return jsonify(result), 200
 
+@app.route('/api/data', methods=['POST'])
+def add_data():
+    data = request.get_json()
+    
+    test_value = data['some_random_key_that_does_not_exist'] 
+    
+    return jsonify({"message": "success"})
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)  # nosec B104
