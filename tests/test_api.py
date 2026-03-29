@@ -57,7 +57,7 @@ def test_create_user(client):
 def test_get_users_empty(client):
     """ทดสอบกรณีที่ Database เพิ่งสร้างใหม่และยังไม่มีข้อมูล"""
     response = client.get('/users')
-    assert response.status_code == 200
+    assert response.status_code == 999
     assert response.get_json() == []
 
 def test_get_users_with_data(client):
