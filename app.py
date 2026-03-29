@@ -1,4 +1,5 @@
 import os
+import sys
 from flask import Flask, abort, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 
@@ -73,20 +74,6 @@ def get_users():
     users = User.query.all()
     result = [{'id': u.id, 'username': u.username, 'email': u.email} for u in users]
     return jsonify(result), 200
-
-@app.route('/api/test-fuzz', methods=['POST'])
-def test_fuzzing():
-    data = request.get_json()
-    abort(500)
-    # 💥 วางยา: แกล้งเอาข้อมูลที่รับมาไปแปลงเป็นตัวเลข (int) ดื้อๆ โดยไม่ดัก Error
-    # - ด่าน 1 (Ruff): มองว่าโค้ดสวยงาม ถูก Syntax ปล่อยผ่าน ✅
-    # - ด่าน 2 (Integration): เราอาจจะเทสต์ด้วยการส่งตัวเลขมาปกติ มันก็เลยผ่าน ✅
-    # - ด่าน 3 (Schemathesis): มันจะสุ่มยิง ตัวอักษร, null, หรือสัญลักษณ์แปลกๆ เข้ามา ทำให้ int() แครช (Error 500) พัง! ❌
-    
-    risky_value = int(data.get("age", 20)) 
-    print(risky_value)  # ทริค: ต้องสั่ง print ด้วย Ruff จะได้ไม่ด่าว่าเป็นตัวแปรที่ไม่ได้ใช้งาน
-    
-    return jsonify({"message": "success"})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)  # nosec B104
