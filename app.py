@@ -4,8 +4,6 @@ from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 
-# 💡 ทริคสำคัญ: เราใช้ Environment Variable รับค่า URL ของ Database 
-# เพื่อเปิดทางให้ Testcontainers สามารถเอา URL ของ Database ชั่วคราวมาเสียบแทนได้ตอนรันเทสต์!
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///:memory:')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -60,12 +58,10 @@ def openapi_spec():
 @app.route('/users', methods=['POST'])
 def create_user():
     data = request.get_json()
-    
-    # ดักจับ Error เบื้องต้น
+
     if not data or 'username' not in data or 'email' not in data:
         return jsonify({'error': 'Missing required fields: username, email'}), 400
     
-    # เพิ่มลง Database
     new_user = User(username=data['username'], email=data['email'])
     db.session.add(new_user)
     db.session.commit()
