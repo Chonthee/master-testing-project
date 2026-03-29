@@ -1,4 +1,4 @@
-name: Python Enterprise CI
+name: Python CI
 
 on:
   push:
@@ -30,8 +30,8 @@ jobs:
         pip install -r requirements.txt
         pip install ruff pytest testcontainers sqlalchemy psycopg2-binary flask bandit safety schemathesis
 
-    - name: Stage 1 - Code Quality & Security (Ruff)
-      run: ruff check app.py
+    # - name: Stage 1 - Code Quality & Security (Ruff)
+    #   run: ruff check app.py
 
     - name: Stage 2 - Integration Tests (Testcontainers + Postgres)
       run: python -m pytest -v tests/

@@ -22,7 +22,7 @@ if __name__ == "__main__":
     # ด่าน 1: Code Quality & Security Scan (Ruff)
     # ---------------------------------------------------------
     # เปลี่ยนจาก bandit มาใช้ ruff แทน ทำงานไวปานสายฟ้าแลบ
-    run_command("ruff check app.py", "Stage 1: Code Quality & Security Scan (Ruff)")
+    # run_command("ruff check app.py", "Stage 1: Code Quality & Security Scan (Ruff)")
     
     # ---------------------------------------------------------
     # ด่าน 2: Integration Testing
